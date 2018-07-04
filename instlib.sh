@@ -123,7 +123,7 @@ function inst_gcc {
 
 	grep "appendpath" $profile > /dev/null
 	[ $? -eq 0 ] \
-		&& sudo sed -i "/appendpath '\/usr\/bin'/a appendpath '${gcc-bin}'" $profile \
+		&& sudo sed -i "/appendpath '\/usr\/bin'/a appendpath '${gcc_bin}'" $profile \
 		|| sudo sed -i "/^PATH=/c PATH=${PATH}:${gcc_bin}" $profile
 
 	source $profile
