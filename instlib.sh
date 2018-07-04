@@ -80,8 +80,7 @@ function inst_gcc {
 
 	[ ! -d $gcc_root ] && sudo mkdir -p $gcc_root
 
-#	gcc_file=`dl_pkg ${gcc_x64_url} .`
-	gcc_file=`echo "./${gcc_pkg}"`
+	gcc_file=`dl_pkg ${gcc_x64_url} .`
 	[ -z "$gcc_file" ] && return
 
 	gcc_dir=`xtar_pkg ${gcc_pkg} ${gcc_root} sudo`
