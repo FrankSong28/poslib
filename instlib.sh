@@ -10,10 +10,10 @@ LIB_SRC_ROOT=${LIB_ROOT}/src
 # pkg define
 gcc_pkg=gcc-linaro-7.3.1-2018.05-x86_64_arm-linux-gnueabihf.tar.xz
 zlib_pkg=zlib-1.2.11.tar.gz
-libpng_pkg=libpng-1.6.32.tar.xz
+libpng_pkg=libpng-1.6.34.tar.xz
 ft2_src_pkg=freetype-2.8.1.tar.gz
 ft2_demo_pkg=ft2demos-2.8.1.tar.gz
-ft2_doc_pkg=freetype-doc-2.8.1.tar.gz
+ft2_doc_pkg=freetype-doc-2.8.tar.bz2
 alsa_pkg=alsa-lib-1.1.5.tar.bz2
 wpa_supplicant_pkg=wpa_supplicant-2.6.tar.gz
 
@@ -57,6 +57,12 @@ function dl_pkg {
 
 	[ -n "$2" ] && dl_pkg_dir=$2 || dl_pkg_dir=${LIB_PKG_ROOT}
 	cd $dl_pkg_dir
+
+	if [ -f "${pkg_name}" ]; then
+		echo "${pkg_name}"
+		return
+	fi
+
 	curl -L -O $1 1>&2
 	[ $? -ne 0 ] && return
 	echo "pkg_name=$pkg_name" >&2
@@ -198,7 +204,7 @@ function inst_libpng {
 	pkg_file=`dl_pkg "${libpng_url}"`
 	[ -z "$pkg_file" ] && return
 
-	lib_dir=`xtar_pkg ${LIB_PKG_ROOT}/${libpng_pkg} ${LIB_SRC_ROOT}`
+	lib_dir=`xtar_pkg ${LIB_PKG_ROOT}/${pkg_file} ${LIB_SRC_ROOT}`
 	[ -z "$lib_dir" ] && return
 
 	cd ${LIB_SRC_ROOT}/${lib_dir}/
@@ -219,12 +225,12 @@ function inst_libpng {
 function inst_freetype {
 	echo "Install FreeType"
 
-	dl_pkg "${ft2_doc_url}"
+	src_pkg_file=`dl_pkg "${ft2_doc_url}"`
 	dl_pkg "${ft2_demo_pkg}"
 	pkg_file=`dl_pkg "${ft2_src_pkg}"`
 	[ -z "$pkg_file" ] && return
 
-	lib_dir=`xtar_pkg ${LIB_PKG_ROOT}/${ft2_src_pkg} ${LIB_SRC_ROOT}`
+	lib_dir=`xtar_pkg ${LIB_PKG_ROOT}/${src_pkg_file} ${LIB_SRC_ROOT}`
 	[ -z "$lib_dir" ] && return
 
 	cd ${LIB_SRC_ROOT}/${lib_dir}
@@ -246,7 +252,7 @@ function inst_alsa {
 	pkg_file=`dl_pkg "${alsa_url}"`
 	[ -z "$pkg_file" ] && return
 
-	lib_dir=`xtar_pkg ${LIB_PKG_ROOT}/${alsa_pkg} ${LIB_SRC_ROOT}`
+	lib_dir=`xtar_pkg ${LIB_PKG_ROOT}/${pkg_file} ${LIB_SRC_ROOT}`
 	[ -z "$lib_dir" ] && return
 
 	cd ${LIB_SRC_ROOT}/${lib_dir}
@@ -342,9 +348,9 @@ function inst_openssl {
 function inst_libnl {
 	echo "Install libnl"
 
-	pkg_file=`dl_pkg "$libnl_url"`
+	pkg_dir=`dl_pkg "$libnl_url"`
 	[ -z "$pkg_dir" ] && return
-	src_dir=`xtar_pkg "${LIB_PKG_ROOT}/${pkg_file}" ${LIB_SRC_ROOT}`
+	src_dir=`xtar_pkg "${LIB_PKG_ROOT}/${pkg_dir}" ${LIB_SRC_ROOT}`
 	[ -z "$src_dir" ] && return
 	cd ${LIB_SRC_ROOT}/${src_dir}
 
