@@ -225,10 +225,10 @@ function inst_libpng {
 function inst_freetype {
 	echo "Install FreeType"
 
-	src_pkg_file=`dl_pkg "${ft2_doc_url}"`
+	doc_pkg_file=`dl_pkg "${ft2_doc_url}"`
 	dl_pkg "${ft2_demo_pkg}"
-	pkg_file=`dl_pkg "${ft2_src_pkg}"`
-	[ -z "$pkg_file" ] && return
+	src_pkg_file=`dl_pkg "${ft2_src_url}"`
+	[ -z "$src_pkg_file" ] && return
 
 	lib_dir=`xtar_pkg ${LIB_PKG_ROOT}/${src_pkg_file} ${LIB_SRC_ROOT}`
 	[ -z "$lib_dir" ] && return
